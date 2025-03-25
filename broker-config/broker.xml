@@ -1,0 +1,29 @@
+<configuration xmlns="urn:activemq">
+    <core>
+        <security-settings>
+            <security-setting match="test-queue">
+                <permission type="send" roles="admin,amq"/>
+                <permission type="consume" roles="admin,amq"/>  <!-- 👈 Allow consuming messages -->
+                <permission type="browse" roles="admin"/>
+            </security-setting>
+            <security-setting match="#">
+                <permission type="createAddress" roles="admin"/>
+                <permission type="send" roles="admin"/>
+                <permission type="consume" roles="admin"/>
+            </security-setting>
+        </security-settings>
+
+        <address-settings>
+            <address-setting match="test-queue">
+                <max-size-bytes="-1"/>
+                <expiry-address>DLQ</expiry-address>  <!-- Move expired msgs to Dead Letter Queue -->
+            </address-setting>
+        </address-settings>
+
+        <addresses>
+            <address name="test-queue">
+                <queue name="test-queue" durable="true"/>
+            </address>
+        </addresses>
+    </core>
+</configuration>

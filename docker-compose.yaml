@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  artemis:
+    image: apache/activemq-artemis
+    container_name: artemis-broker
+    environment:
+      ARTEMIS_USERNAME: admin
+      ARTEMIS_PASSWORD: admin
+    ports:
+      - "62626:61616"  # Custom JMS Port
+      - "8261:8161"    # Custom Web Console Port
+    volumes:
+      - ./artemis-data:/var/lib/artemis  # Ensure message persistence
+      - ./broker-config:/var/lib/artemis-instance/etc  # Custom broker config
+    entrypoint: ["/bin/sh", "-c", "/var/lib/artemis-instance/bin/artemis run"]
